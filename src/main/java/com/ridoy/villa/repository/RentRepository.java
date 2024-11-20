@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RentRepository extends JpaRepository<Rent, Long> {
     List<Rent> findByRoom_RoomId(Long roomId);
+    List<Rent> findByRoom_RoomIdAndMonthAndYear(Long roomId, int month, int year);
 }

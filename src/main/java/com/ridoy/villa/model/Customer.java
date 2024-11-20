@@ -26,7 +26,7 @@ public class Customer extends BaseEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "q_id")
+    @Column(name = "q_id") // Qatar ID
     private String qID;
 
     @Column(name = "passport")
@@ -35,10 +35,10 @@ public class Customer extends BaseEntity {
     @Column(name = "security_money")
     private BigDecimal securityMoney;
 
-    @Column(name = "deposit_type")
+    @Column(name = "deposit_type") // e.g., "Cash", "Check", "Credit Card"
     private String depositState;
 
-    @Column(name = "collection_type")
-    private double collectionType;
+    @Column(name = "collection_type") // Currently only "Monthly" is supported
+    private String collectionType;
 
 }

@@ -22,10 +22,13 @@ public class Rent extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private Customer customer; // Optional since a room may not always have a customer
+    private Customer customer;
 
-    @Column(name = "month_year", nullable = false)
-    private String monthYear; // e.g., "2024-01" for January 2024
+    @Column(name = "month", nullable = false)
+    private int month; // e.g., 1 for January, 2 for February
+
+    @Column(name = "year", nullable = false)
+    private int year; // e.g., 2024
 
     @Column(name = "total_rent", nullable = false)
     private BigDecimal totalRent;

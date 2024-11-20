@@ -2,6 +2,7 @@ package com.ridoy.villa.controller;
 
 import com.ridoy.villa.model.Customer;
 import com.ridoy.villa.service.CustomerService;
+import com.ridoy.villa.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +34,10 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customerDetails) {
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody Customer customerDetails) {
         try {
             Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
-            return ResponseEntity.ok(updatedCustomer);
+            return ResponseEntity.ok(ResponseUtil.success("Customer updated successfully", updatedCustomer));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

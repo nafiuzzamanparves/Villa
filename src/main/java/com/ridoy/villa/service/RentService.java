@@ -58,7 +58,8 @@ public class RentService {
         rent.setTotalRent(room.getRentAmount());
 
         // Update fields
-        rent.setMonthYear(rentDetails.getMonthYear());
+        rent.setYear(rentDetails.getYear());
+        rent.setMonth(rentDetails.getMonth());
         rent.setAmountPaid(rentDetails.getAmountPaid());
         rent.setCustomer(rentDetails.getCustomer());
 

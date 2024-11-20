@@ -2,6 +2,7 @@ package com.ridoy.villa.controller;
 
 import com.ridoy.villa.model.User;
 import com.ridoy.villa.service.UserService;
+import com.ridoy.villa.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,10 +52,10 @@ public class UserController {
 
     // Basic login endpoint
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
         boolean isValid = userService.validateUser(username, password);
         if (isValid) {
-            return ResponseEntity.ok("Login successful!");
+            return ResponseEntity.ok(ResponseUtil.success("Login successful!", null));
         } else {
             return ResponseEntity.status(401).body("Invalid username or password.");
         }

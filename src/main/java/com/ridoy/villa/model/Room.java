@@ -1,5 +1,7 @@
 package com.ridoy.villa.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +20,7 @@ public class Room extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "villa_id", nullable = false)
+    @JsonBackReference
     private Villa villa;
 
     @Column(name = "room_number", nullable = false)
@@ -26,7 +29,7 @@ public class Room extends BaseEntity {
     @Column(name = "type")
     private String type; // e.g., Single, Double, Suite
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status; // e.g., Occupied, Available
 
     @ManyToOne
@@ -34,5 +37,11 @@ public class Room extends BaseEntity {
     private Customer customer;
 
     @Column(name = "rent_amount", nullable = false)
-    private BigDecimal rentAmount;
+    private BigDecimal rentAmount = BigDecimal.ZERO;
+
+    @Transient
+    @JsonProperty("villaId")
+    public Long getVillaId() {
+        return this.villa != null ? this.villa.getVillaId() : null;
+    }
 }
