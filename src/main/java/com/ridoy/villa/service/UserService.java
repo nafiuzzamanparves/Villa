@@ -45,13 +45,15 @@ public class UserService {
     }
 
     // Basic login validation
-    public boolean validateUser(String username, String password) {
+    public String validateUser(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsernameAndIsActive(username, true);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             // Simple password validation, consider using password encryption like BCrypt
-            return user.getPassword().equals(password);
+            if (user.getPassword().equals(password)) {
+                return user.getRole();
+            }
         }
-        return false;
+        return null;
     }
 }

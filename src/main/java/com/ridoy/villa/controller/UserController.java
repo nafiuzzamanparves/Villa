@@ -53,9 +53,9 @@ public class UserController {
     // Basic login endpoint
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        boolean isValid = userService.validateUser(username, password);
-        if (isValid) {
-            return ResponseEntity.ok(ResponseUtil.success("Login successful!", null));
+        String userRole = userService.validateUser(username, password);
+        if (userRole != null) {
+            return ResponseEntity.ok(ResponseUtil.success("Login successful!", userRole));
         } else {
             return ResponseEntity.status(401).body("Invalid username or password.");
         }

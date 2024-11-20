@@ -2,12 +2,13 @@ package com.ridoy.villa;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class VillaApplication {
+public class VillaApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(VillaApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(VillaApplication.class, args);
+    }
 
 }
