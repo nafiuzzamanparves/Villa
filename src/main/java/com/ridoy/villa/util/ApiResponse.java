@@ -4,19 +4,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiResponse<T> {
     private String message;
     private String status;
-    private T data; // Generic type for response data
-    private long timestamp;
+    private T data;
+    private String timestamp;
 
-    public ApiResponse(String message, String status, T data) {
-        this.message = message;
+    public ApiResponse(String status, String message, T data) {
         this.status = status;
+        this.message = message;
+        this.timestamp = getCurrentFormattedTimestamp();
         this.data = data;
-        this.timestamp = System.currentTimeMillis();
+    }
+
+    private String getCurrentFormattedTimestamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss:SSS");
+        return LocalDateTime.now().format(formatter);
     }
 }
+
