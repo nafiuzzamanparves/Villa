@@ -29,9 +29,22 @@ public class CustomerService {
 
     public Customer updateCustomer(Long id, Customer customerDetails) {
         Customer customer = customerRepository.findById(id).orElseThrow();
-        customer.setFirstName(customerDetails.getFirstName());
-        customer.setLastName(customerDetails.getLastName());
-        customer.setEmail(customerDetails.getEmail());
+
+        if (customerDetails.getFirstName() != null)
+            customer.setFirstName(customerDetails.getFirstName());
+        if (customerDetails.getLastName() != null)
+            customer.setLastName(customerDetails.getLastName());
+        if (customerDetails.getEmail() != null)
+            customer.setEmail(customerDetails.getEmail());
+        if (customerDetails.getQid() != null)
+            customer.setQid(customerDetails.getQid());
+        if (customerDetails.getPassport() != null)
+            customer.setPassport(customerDetails.getPassport());
+        if (customerDetails.getSecurityMoney() != null)
+            customer.setSecurityMoney(customerDetails.getSecurityMoney());
+        if (customerDetails.getCollectionType() != null)
+            customer.setCollectionType(customerDetails.getCollectionType());
+
         return customerRepository.save(customer);
     }
 

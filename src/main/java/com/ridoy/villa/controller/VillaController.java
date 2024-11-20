@@ -2,6 +2,8 @@ package com.ridoy.villa.controller;
 
 import com.ridoy.villa.model.Villa;
 import com.ridoy.villa.service.VillaService;
+import com.ridoy.villa.util.ApiResponse;
+import com.ridoy.villa.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,35 +19,60 @@ public class VillaController {
 
     // Get all Villas
     @GetMapping
-    public List<Villa> getAllVillas() {
-        return villaService.getAllVillas();
+    public ResponseEntity<ApiResponse<List<Villa>>> getAllVillas() {
+        List<Villa> villas = villaService.getAllVillas();
+        if (villas != null && !villas.isEmpty()) {
+            return ResponseEntity.ok(ResponseUtil.success("Villas retrieved successfully", villas));
+        } else {
+            return ResponseEntity.status(404).body(ResponseUtil.failed("No villas found", null));
+        }
     }
 
     // Get Villa by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Villa> getVillaById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Villa>> getVillaById(@PathVariable Long id) {
         Villa villa = villaService.getVillaById(id);
-        return ResponseEntity.ok(villa);
+        if (villa != null) {
+            return ResponseEntity.ok(ResponseUtil.success("Villa found", villa));
+        } else {
+            return ResponseEntity.status(404).body(ResponseUtil.failed("Villa not found", null));
+        }
     }
 
     // Create a new Villa
     @PostMapping
-    public ResponseEntity<Villa> createVilla(@RequestBody Villa villa) {
-        Villa createdVilla = villaService.createVilla(villa);
-        return ResponseEntity.ok(createdVilla);
+    public ResponseEntity<ApiResponse<?>> createVilla(@RequestBody Villa villa) {
+        try {
+            Villa createdVilla = villaService.createVilla(villa);
+            if (createdVilla != null) {
+                return ResponseEntity.ok(ResponseUtil.success("Villa created successfully", createdVilla));
+            } else {
+                return ResponseEntity.status(400).body(ResponseUtil.failed("Villa creation failed", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Villa creation failed", e.getMessage()));
+        }
     }
 
     // Update an existing Villa
     @PutMapping("/{id}")
-    public ResponseEntity<Villa> updateVilla(@PathVariable Long id, @RequestBody Villa villaDetails) {
-        Villa updatedVilla = villaService.updateVilla(id, villaDetails);
-        return ResponseEntity.ok(updatedVilla);
+    public ResponseEntity<ApiResponse<Villa>> updateVilla(@PathVariable Long id, @RequestBody Villa villaDetails) {
+        try {
+            Villa updatedVilla = villaService.updateVilla(id, villaDetails);
+            return ResponseEntity.ok(ResponseUtil.success("Villa updated successfully", updatedVilla));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(ResponseUtil.failed("Villa not found for update", null));
+        }
     }
 
     // Delete a Villa
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVilla(@PathVariable Long id) {
-        villaService.deleteVilla(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse<Void>> deleteVilla(@PathVariable Long id) {
+        try {
+            villaService.deleteVilla(id);
+            return ResponseEntity.ok(ResponseUtil.success("Villa deleted successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(ResponseUtil.failed("Villa not found for deletion", null));
+        }
     }
 }

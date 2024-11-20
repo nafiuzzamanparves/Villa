@@ -31,11 +31,20 @@ public class RoomService {
     // Update an existing Room
     public Room updateRoom(Long id, Room roomDetails) {
         Room room = roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found with id: " + id));
-        room.setRoomNumber(roomDetails.getRoomNumber());
-        room.setType(roomDetails.getType());
-        room.setStatus(roomDetails.getStatus());
-        room.setVilla(roomDetails.getVilla());
-        room.setCustomer(roomDetails.getCustomer());
+
+        if (roomDetails.getRoomNumber() != null)
+            room.setRoomNumber(roomDetails.getRoomNumber());
+        if (roomDetails.getRentAmount() != null)
+            room.setRentAmount(roomDetails.getRentAmount());
+        if (roomDetails.getType() != null)
+            room.setType(roomDetails.getType());
+        if (roomDetails.getStatus() != null)
+            room.setStatus(roomDetails.getStatus());
+        if (roomDetails.getVilla() != null)
+            room.setVilla(roomDetails.getVilla());
+        if (roomDetails.getCustomer() != null)
+            room.setCustomer(roomDetails.getCustomer());
+
         return roomRepository.save(room);
     }
 

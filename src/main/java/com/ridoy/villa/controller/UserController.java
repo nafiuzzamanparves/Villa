@@ -2,6 +2,7 @@ package com.ridoy.villa.controller;
 
 import com.ridoy.villa.model.User;
 import com.ridoy.villa.service.UserService;
+import com.ridoy.villa.util.ApiResponse;
 import com.ridoy.villa.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,46 +19,67 @@ public class UserController {
 
     // Get all Users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        if (users != null && !users.isEmpty()) {
+            return ResponseEntity.ok(ResponseUtil.success("Users retrieved successfully", users));
+        } else {
+            return ResponseEntity.status(404).body(ResponseUtil.failed("No users found", null));
+        }
     }
 
     // Get a User by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
-        return ResponseEntity.ok(user);
+        if (user != null) {
+            return ResponseEntity.ok(ResponseUtil.success("User found", user));
+        } else {
+            return ResponseEntity.status(404).body(ResponseUtil.failed("User not found", null));
+        }
     }
 
     // Create a new User
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
-        return ResponseEntity.ok(createdUser);
+        if (createdUser != null) {
+            return ResponseEntity.ok(ResponseUtil.success("User created successfully", createdUser));
+        } else {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("User creation failed", null));
+        }
     }
 
     // Update an existing User
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        User updatedUser = userService.updateUser(id, userDetails);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        try {
+            User updatedUser = userService.updateUser(id, userDetails);
+            if (updatedUser != null) {
+                return ResponseEntity.ok(ResponseUtil.success("User updated successfully", updatedUser));
+            } else {
+                return ResponseEntity.status(400).body(ResponseUtil.failed("User update failed", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("User update failed", e.getMessage()));
+        }
     }
 
     // Delete a User by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ResponseUtil.success("User deleted successfully", null));
     }
 
     // Basic login endpoint
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<ApiResponse<String>> login(@RequestParam String username, @RequestParam String password) {
         String userRole = userService.validateUser(username, password);
         if (userRole != null) {
             return ResponseEntity.ok(ResponseUtil.success("Login successful!", userRole));
         } else {
-            return ResponseEntity.status(401).body("Invalid username or password.");
+            return ResponseEntity.status(401).body(ResponseUtil.failed("Invalid username or password", null));
         }
     }
 }

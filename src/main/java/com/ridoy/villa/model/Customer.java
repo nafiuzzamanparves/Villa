@@ -27,7 +27,7 @@ public class Customer extends BaseEntity {
     private String email;
 
     @Column(name = "q_id") // Qatar ID
-    private String qID;
+    private String qid;
 
     @Column(name = "passport")
     private String passport;
