@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,12 +20,16 @@ public class UserController {
 
     // Get all Users
     @GetMapping
-    public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        if (users != null && !users.isEmpty()) {
-            return ResponseEntity.ok(ResponseUtil.success("Users retrieved successfully", users));
-        } else {
-            return ResponseEntity.status(404).body(ResponseUtil.failed("No users found", null));
+    public ResponseEntity<ApiResponse<?>> getAllUsers() {
+        try {
+            List<User> users = userService.getAllUsers();
+            if (users != null && !users.isEmpty()) {
+                return ResponseEntity.ok(ResponseUtil.success("Users retrieved successfully", users));
+            } else {
+                return ResponseEntity.status(404).body(ResponseUtil.success("No users found", new ArrayList<>()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Users retrieval failed", e.getMessage()));
         }
     }
 
@@ -74,8 +79,8 @@ public class UserController {
 
     // Basic login endpoint
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(@RequestParam String username, @RequestParam String password) {
-        String userRole = userService.validateUser(username, password);
+    public ResponseEntity<ApiResponse<String>> login(@RequestBody User user) {
+        String userRole = userService.validateUser(user.getUsername(), user.getPassword());
         if (userRole != null) {
             return ResponseEntity.ok(ResponseUtil.success("Login successful!", userRole));
         } else {

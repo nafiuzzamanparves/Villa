@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,12 +20,16 @@ public class CustomerController {
 
     // Get all customers
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Customer>>> getAllCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
-        if (customers != null && !customers.isEmpty()) {
-            return ResponseEntity.ok(ResponseUtil.success("Customers retrieved successfully", customers));
-        } else {
-            return ResponseEntity.status(404).body(ResponseUtil.failed("No customers found", null));
+    public ResponseEntity<ApiResponse<?>> getAllCustomers() {
+        try {
+            List<Customer> customers = customerService.getAllCustomers();
+            if (customers != null && !customers.isEmpty()) {
+                return ResponseEntity.ok(ResponseUtil.success("Customers retrieved successfully", customers));
+            } else {
+                return ResponseEntity.status(404).body(ResponseUtil.success("No customers found", new ArrayList<>()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Customers retrieval failed", e.getMessage()));
         }
     }
 

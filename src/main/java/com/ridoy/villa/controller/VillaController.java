@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,12 +20,16 @@ public class VillaController {
 
     // Get all Villas
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Villa>>> getAllVillas() {
-        List<Villa> villas = villaService.getAllVillas();
-        if (villas != null && !villas.isEmpty()) {
-            return ResponseEntity.ok(ResponseUtil.success("Villas retrieved successfully", villas));
-        } else {
-            return ResponseEntity.status(404).body(ResponseUtil.failed("No villas found", null));
+    public ResponseEntity<ApiResponse<?>> getAllVillas() {
+        try {
+            List<Villa> villas = villaService.getAllVillas();
+            if (villas != null && !villas.isEmpty()) {
+                return ResponseEntity.ok(ResponseUtil.success("Villas retrieved successfully", villas));
+            } else {
+                return ResponseEntity.status(404).body(ResponseUtil.success("No villas found", new ArrayList<>()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Villas retrieval failed", e.getMessage()));
         }
     }
 

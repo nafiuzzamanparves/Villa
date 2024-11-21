@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,12 +20,16 @@ public class RoomController {
 
     // Get all Rooms
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Room>>> getAllRooms() {
-        List<Room> rooms = roomService.getAllRooms();
-        if (rooms != null && !rooms.isEmpty()) {
-            return ResponseEntity.ok(ResponseUtil.success("Rooms retrieved successfully", rooms));
-        } else {
-            return ResponseEntity.status(404).body(ResponseUtil.failed("No rooms found", null));
+    public ResponseEntity<ApiResponse<?>> getAllRooms() {
+        try {
+            List<Room> rooms = roomService.getAllRooms();
+            if (rooms != null && !rooms.isEmpty()) {
+                return ResponseEntity.ok(ResponseUtil.success("Rooms retrieved successfully", rooms));
+            } else {
+                return ResponseEntity.status(404).body(ResponseUtil.failed("No rooms found", new ArrayList<>()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Rooms retrieval failed", e.getMessage()));
         }
     }
 
