@@ -37,6 +37,7 @@ public class VillaController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Villa>> getVillaById(@PathVariable Long id) {
         Villa villa = villaService.getVillaById(id);
+        
         if (villa != null) {
             return ResponseEntity.ok(ResponseUtil.success("Villa found", villa));
         } else {

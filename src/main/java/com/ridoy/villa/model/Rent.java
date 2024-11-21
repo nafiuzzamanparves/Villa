@@ -3,6 +3,7 @@ package com.ridoy.villa.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
@@ -34,6 +35,7 @@ public class Rent extends BaseEntity {
     private BigDecimal totalRent;
 
     @Column(name = "amount_paid", nullable = false)
+    @ColumnDefault("0.0")
     private BigDecimal amountPaid = BigDecimal.ZERO;
 
     @Column(name = "security_money_used")
