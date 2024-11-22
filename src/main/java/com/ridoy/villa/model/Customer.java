@@ -1,6 +1,8 @@
 package com.ridoy.villa.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ridoy.villa.model.enums.CollectionType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +19,7 @@ public class Customer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "last_name")
@@ -35,9 +37,11 @@ public class Customer extends BaseEntity {
     @Column(name = "security_money")
     private BigDecimal securityMoney;
 
-
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "collection_type") // Currently only "Monthly" is supported
-    private String collectionType;
+    private CollectionType collectionType;
 
+    @OneToOne(mappedBy = "customer")
+    @JsonBackReference // Prevent infinite recursion during serialization
+    private Room room;  // This is the inverse side of the relationship
 }

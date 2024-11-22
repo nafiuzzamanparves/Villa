@@ -4,6 +4,7 @@ import com.ridoy.villa.model.User;
 import com.ridoy.villa.service.UserService;
 import com.ridoy.villa.util.ApiResponse;
 import com.ridoy.villa.util.ResponseUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -82,6 +84,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<String>> login(@RequestBody User user) {
         String userRole = userService.validateUser(user.getUsername(), user.getPassword());
         if (userRole != null) {
+            log.info("User found and the user role is {}", userRole);
             return ResponseEntity.ok(ResponseUtil.success("Login successful!", userRole));
         } else {
             return ResponseEntity.status(401).body(ResponseUtil.failed("Invalid username or password", null));

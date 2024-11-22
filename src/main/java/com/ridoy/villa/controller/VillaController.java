@@ -1,6 +1,8 @@
 package com.ridoy.villa.controller;
 
+import com.ridoy.villa.dto.RoomDTO;
 import com.ridoy.villa.model.Villa;
+import com.ridoy.villa.service.RoomService;
 import com.ridoy.villa.service.VillaService;
 import com.ridoy.villa.util.ApiResponse;
 import com.ridoy.villa.util.ResponseUtil;
@@ -17,6 +19,9 @@ public class VillaController {
 
     @Autowired
     private VillaService villaService;
+
+    @Autowired
+    private RoomService roomService;
 
     // Get all Villas
     @GetMapping
@@ -37,7 +42,7 @@ public class VillaController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Villa>> getVillaById(@PathVariable Long id) {
         Villa villa = villaService.getVillaById(id);
-        
+
         if (villa != null) {
             return ResponseEntity.ok(ResponseUtil.success("Villa found", villa));
         } else {
@@ -79,6 +84,21 @@ public class VillaController {
             return ResponseEntity.ok(ResponseUtil.success("Villa deleted successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(404).body(ResponseUtil.failed("Villa not found for deletion", null));
+        }
+    }
+
+    @GetMapping("/{villaId}/rooms")
+    public ResponseEntity<?> getRoomsByVillaId(@PathVariable Long villaId) {
+        try {
+//            List<Room> rooms = roomService.getRoomsByVillaId(villaId);
+            List<RoomDTO> rooms = roomService.getRoomDTOByVillaId(villaId);
+            if (rooms != null && !rooms.isEmpty()) {
+                return ResponseEntity.ok(ResponseUtil.success("Villas retrieved successfully", rooms));
+            } else {
+                return ResponseEntity.status(404).body(ResponseUtil.success("No villas found", new ArrayList<>()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Villas retrieval failed", e.getMessage()));
         }
     }
 }

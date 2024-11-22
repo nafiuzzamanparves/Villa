@@ -1,5 +1,7 @@
 package com.ridoy.villa.model;
 
+import com.ridoy.villa.model.enums.Month;
+import com.ridoy.villa.model.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,8 +27,9 @@ public class Rent extends BaseEntity {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "month", nullable = false)
-    private int month; // e.g., 1 for January, 2 for February
+    private Month month; // e.g., "January", "February", "March"
 
     @Column(name = "year", nullable = false)
     private int year; // e.g., 2024
@@ -38,12 +41,12 @@ public class Rent extends BaseEntity {
     @ColumnDefault("0.0")
     private BigDecimal amountPaid = BigDecimal.ZERO;
 
-    @Column(name = "security_money_used")
-    private BigDecimal securityMoneyUsed = BigDecimal.ZERO;
+    @Column(name = "is_security_money_used")
+    private boolean isSecurityMoneyUsed;
 
     @Column(name = "deposit_type") // e.g., "Cash", "Check", "Credit Card"
     @Enumerated(EnumType.STRING)
-    private String depositState;
+    private PaymentType paymentType;
 
     @Column(name = "status", nullable = false)
     private String status; // e.g., "Paid", "Partial", "Unpaid"

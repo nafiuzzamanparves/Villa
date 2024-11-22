@@ -1,5 +1,6 @@
 package com.ridoy.villa.service;
 
+import com.ridoy.villa.dto.RoomDTO;
 import com.ridoy.villa.model.Room;
 import com.ridoy.villa.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,4 +54,15 @@ public class RoomService {
         Room room = roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found with id: " + id));
         roomRepository.delete(room);
     }
+
+    @SuppressWarnings("unused")
+    public List<Room> getRoomsByVillaId(Long villaId) {
+        return roomRepository.findByVilla_VillaId(villaId);
+    }
+
+    public List<RoomDTO> getRoomDTOByVillaId(Long villaId) {
+        return roomRepository.findRoomDTOByVillaId(villaId);
+    }
 }
+
+

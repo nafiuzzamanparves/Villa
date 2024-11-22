@@ -1,11 +1,8 @@
 package com.ridoy.villa.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +23,8 @@ public class Villa extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "villa", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Room> rooms;
+//    @OneToMany(mappedBy = "villa", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    private List<Room> rooms;
 
 }

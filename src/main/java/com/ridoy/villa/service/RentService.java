@@ -72,36 +72,36 @@ public class RentService {
     // Calculate Rent status based on the totalRent and amountPaid
     private void calculateRentStatus(Rent rent) {
         BigDecimal remainingAmount = rent.getTotalRent().subtract(rent.getAmountPaid());
-
-        if (remainingAmount.compareTo(BigDecimal.ZERO) == 0) {
-            // Full payment
-            rent.setStatus("Paid");
-        } else if (remainingAmount.compareTo(BigDecimal.ZERO) > 0 && rent.getAmountPaid().compareTo(BigDecimal.ZERO) > 0) {
-            // Partial payment
-            rent.setStatus("Partial");
+        boolean securityMoneyUsed = rent.isSecurityMoneyUsed();
+        if (securityMoneyUsed) {
+            // Deduct from security
+            handleSecurityMoneyDeduction(rent);
         } else {
-            // No payment or payment with security
-            handleRentPayment(rent);
+            if (remainingAmount.compareTo(BigDecimal.ZERO) == 0) {
+                rent.setStatus("Paid");
+            } else if (remainingAmount.compareTo(BigDecimal.ZERO) > 0 && rent.getAmountPaid().compareTo(BigDecimal.ZERO) > 0) {
+                rent.setStatus("Partial");
+            }
         }
     }
 
     // Logic for handling payment with security money
-    private void handleRentPayment(Rent rent) {
+    private void handleSecurityMoneyDeduction(Rent rent) {
         BigDecimal remainingAmount = rent.getTotalRent().subtract(rent.getAmountPaid());
 
         if (remainingAmount.compareTo(BigDecimal.ZERO) > 0 && rent.getCustomer() != null) {
-            Customer customer = rent.getCustomer();
+            // Get Customer Here
+            Long roomId = rent.getRoom().getRoomId();
+
+            // Get Customer
+            Customer customer = roomRepository.findCustomerByRoomId(roomId);
             BigDecimal customerSecurityMoney = customer.getSecurityMoney();
 
             // Use security money if available
             if (customerSecurityMoney.compareTo(remainingAmount) >= 0) {
-                // Deduct from security
                 customer.setSecurityMoney(customerSecurityMoney.subtract(remainingAmount));
-                rent.setSecurityMoneyUsed(remainingAmount);
                 rent.setStatus("Paid");
             } else if (customerSecurityMoney.compareTo(BigDecimal.ZERO) > 0) {
-                // Partially deduct
-                rent.setSecurityMoneyUsed(customerSecurityMoney);
                 rent.setAmountPaid(rent.getAmountPaid().add(customerSecurityMoney));
                 rent.setStatus("Partial");
                 customer.setSecurityMoney(BigDecimal.ZERO);
@@ -117,7 +117,7 @@ public class RentService {
         }
     }
 
-    // Delete a Rent record
+    @SuppressWarnings("unused")
     public void deleteRent(Long rentId) {
         Rent rent = rentRepository.findById(rentId)
                 .orElseThrow(() -> new RuntimeException("Rent not found with id: " + rentId));

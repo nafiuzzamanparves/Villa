@@ -1,7 +1,7 @@
 package com.ridoy.villa.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ridoy.villa.model.enums.RoomType;
+import com.ridoy.villa.model.enums.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,30 +18,31 @@ public class Room extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomId;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "villa_id", nullable = false)
-    @JsonBackReference
     private Villa villa;
 
     @Column(name = "room_number", nullable = false)
     private String roomNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    private String type; // e.g., Single, Double, Suite
+    private RoomType type; // e.g., Single, Double, Suite
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status; // e.g., Occupied, Available
+    private Status status; // e.g., Occupied, Available
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @Column(name = "rent_amount", nullable = false)
     private BigDecimal rentAmount = BigDecimal.ZERO;
 
-    @Transient
-    @JsonProperty("villaId")
-    public Long getVillaId() {
-        return this.villa != null ? this.villa.getVillaId() : null;
-    }
+//    @Transient
+//    @JsonProperty("villaId")
+//    public Long getVillaId() {
+//        return this.villa != null ? this.villa.getVillaId() : null;
+//    }
 }

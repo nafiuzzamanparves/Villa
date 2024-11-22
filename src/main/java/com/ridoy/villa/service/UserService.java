@@ -56,7 +56,7 @@ public class UserService {
             User user = userOpt.get();
             // Simple password validation, consider using password encryption like BCrypt
             if (user.getPassword().equals(password)) {
-                return user.getRole();
+                return user.getRole().name();
             }
         }
         return null;

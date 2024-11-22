@@ -1,5 +1,6 @@
 package com.ridoy.villa.model;
 
+import com.ridoy.villa.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class User extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private String role; // e.g., "OWNER" or "COLLECTOR"
+    private Role role;
 }
