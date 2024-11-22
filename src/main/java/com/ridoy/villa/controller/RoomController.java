@@ -26,7 +26,7 @@ public class RoomController {
             if (rooms != null && !rooms.isEmpty()) {
                 return ResponseEntity.ok(ResponseUtil.success("Rooms retrieved successfully", rooms));
             } else {
-                return ResponseEntity.status(404).body(ResponseUtil.failed("No rooms found", new ArrayList<>()));
+                return ResponseEntity.status(404).body(ResponseUtil.success("No rooms found", new ArrayList<>()));
             }
         } catch (Exception e) {
             return ResponseEntity.status(400).body(ResponseUtil.failed("Rooms retrieval failed", e.getMessage()));

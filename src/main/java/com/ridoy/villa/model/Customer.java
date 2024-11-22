@@ -35,8 +35,7 @@ public class Customer extends BaseEntity {
     @Column(name = "security_money")
     private BigDecimal securityMoney;
 
-    @Column(name = "deposit_type") // e.g., "Cash", "Check", "Credit Card"
-    private String depositState;
+
 
     @Column(name = "collection_type") // Currently only "Monthly" is supported
     private String collectionType;

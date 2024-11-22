@@ -41,6 +41,10 @@ public class Rent extends BaseEntity {
     @Column(name = "security_money_used")
     private BigDecimal securityMoneyUsed = BigDecimal.ZERO;
 
+    @Column(name = "deposit_type") // e.g., "Cash", "Check", "Credit Card"
+    @Enumerated(EnumType.STRING)
+    private String depositState;
+
     @Column(name = "status", nullable = false)
     private String status; // e.g., "Paid", "Partial", "Unpaid"
 }

@@ -36,7 +36,7 @@ public class RentController {
             if (createdRent != null) {
                 return ResponseEntity.ok(ResponseUtil.success("Rent created successfully", createdRent));
             } else {
-                return ResponseEntity.status(400).body(ResponseUtil.failed("Rent creation failed", null));
+                return ResponseEntity.status(400).body(ResponseUtil.success("Rent creation failed", null));
             }
         } catch (Exception e) {
             return ResponseEntity.status(400).body(ResponseUtil.failed("Rent creation failed", e.getMessage()));
