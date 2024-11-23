@@ -1,5 +1,6 @@
 package com.ridoy.villa.controller;
 
+import com.ridoy.villa.dto.RoomDTO;
 import com.ridoy.villa.model.Room;
 import com.ridoy.villa.service.RoomService;
 import com.ridoy.villa.util.ApiResponse;
@@ -80,4 +81,19 @@ public class RoomController {
             return ResponseEntity.status(404).body(ResponseUtil.failed("Room not found for deletion", null));
         }
     }
+
+    @GetMapping("/available")
+    public ResponseEntity<ApiResponse<?>> getAvailableRooms() {
+        try {
+            List<RoomDTO> rooms = roomService.getAvailableRooms();
+            if (rooms != null && !rooms.isEmpty()) {
+                return ResponseEntity.ok(ResponseUtil.success("Rooms retrieved successfully", rooms));
+            } else {
+                return ResponseEntity.status(404).body(ResponseUtil.success("No rooms found", new ArrayList<>()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Rooms retrieval failed", e.getMessage()));
+        }
+    }
 }
+

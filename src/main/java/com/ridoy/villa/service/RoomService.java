@@ -2,6 +2,7 @@ package com.ridoy.villa.service;
 
 import com.ridoy.villa.dto.RoomDTO;
 import com.ridoy.villa.model.Room;
+import com.ridoy.villa.model.enums.Status;
 import com.ridoy.villa.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,10 @@ public class RoomService {
 
     public List<RoomDTO> getRoomDTOByVillaId(Long villaId) {
         return roomRepository.findRoomDTOByVillaId(villaId);
+    }
+
+    public List<RoomDTO> getAvailableRooms() {
+        return roomRepository.findRoomsByStatus(Status.AVAILABLE);
     }
 }
 
