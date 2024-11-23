@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
@@ -56,4 +57,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             WHERE r.status = :status
             """)
     List<RoomDTO> findRoomsByStatus(@Param("status") Status status);
+
+    Optional<Room> findRoomsByCustomer_CustomerId(Long id);
 }
