@@ -16,6 +16,25 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Customer findCustomerByRoomId(Long roomId);
 
+    @Query("""
+            SELECT new com.ridoy.villa.dto.RoomDTO(
+                r.roomId,\s
+                r.roomNumber,\s
+                r.type,\s
+                r.status,\s
+                r.rentAmount,\s
+                r.villa.villaId,\s
+                r.customer.customerId,\s
+                r.createdAt,\s
+                r.updatedAt,\s
+                r.createdBy,\s
+                r.updatedBy,\s
+                r.isActive
+            )\s
+            FROM Room r\s
+            """)
+    List<RoomDTO> findAllRooms();
+
     List<Room> findByVilla_VillaId(Long villaId);
 
     @Query("""
@@ -58,5 +77,23 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             """)
     List<RoomDTO> findRoomsByStatus(@Param("status") Status status);
 
-    Optional<Room> findRoomsByCustomer_CustomerId(Long id);
+    @Query("""
+            SELECT new com.ridoy.villa.dto.RoomDTO(
+                r.roomId,\s
+                r.roomNumber,\s
+                r.type,\s
+                r.status,\s
+                r.rentAmount,\s
+                r.villa.villaId,\s
+                r.customer.customerId,\s
+                r.createdAt,\s
+                r.updatedAt,\s
+                r.createdBy,\s
+                r.updatedBy,\s
+                r.isActive
+            )\s
+            FROM Room r\s
+            WHERE r.roomId = :roomId
+            """)
+    Optional<RoomDTO> findByRoomId(Long roomId);
 }

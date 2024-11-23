@@ -16,13 +16,16 @@ public class RoomService {
     private RoomRepository roomRepository;
 
     // Get all Rooms
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public List<RoomDTO> getAllRooms() {
+        return roomRepository.findAllRooms();
     }
 
-    // Get a Room by ID
-    public Room getRoomById(Long id) {
-        return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found with id: " + id));
+
+    public RoomDTO getRoomById(Long id) {
+        return roomRepository.findByRoomId(id)
+                .orElseThrow(() -> new RuntimeException("Room not found with id: " + id));
+
+
     }
 
     // Create a new Room

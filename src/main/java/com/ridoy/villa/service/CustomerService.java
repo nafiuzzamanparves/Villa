@@ -51,10 +51,9 @@ public class CustomerService {
     @Transactional
     public Customer updateCustomer(Long id, Customer customerDetails) {
         Customer customer = customerRepository.findByCustomerId(id).orElseThrow();
-        Room associatedRoom = customer.getRoom();
-//        Room associatedRoom = roomRepository.findRoomsByCustomer_CustomerId(id).orElseThrow();
+        Room associatedRoom = customer.getRoom(); // Lazy loading
 
-        Customer savedCustomer = null;
+        Customer savedCustomer;
         Long givenRoomId = customerDetails.getRoom().getRoomId();
 
         if (customerDetails.getFirstName() != null) customer.setFirstName(customerDetails.getFirstName());

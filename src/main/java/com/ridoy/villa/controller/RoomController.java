@@ -23,7 +23,7 @@ public class RoomController {
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getAllRooms() {
         try {
-            List<Room> rooms = roomService.getAllRooms();
+            List<RoomDTO> rooms = roomService.getAllRooms();
             if (rooms != null && !rooms.isEmpty()) {
                 return ResponseEntity.ok(ResponseUtil.success("Rooms retrieved successfully", rooms));
             } else {
@@ -36,12 +36,16 @@ public class RoomController {
 
     // Get a Room by ID
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Room>> getRoomById(@PathVariable Long id) {
-        Room room = roomService.getRoomById(id);
-        if (room != null) {
-            return ResponseEntity.ok(ResponseUtil.success("Room found", room));
-        } else {
-            return ResponseEntity.status(404).body(ResponseUtil.failed("Room not found", null));
+    public ResponseEntity<ApiResponse<?>> getRoomById(@PathVariable Long id) {
+        try {
+            RoomDTO room = roomService.getRoomById(id);
+            if (room != null) {
+                return ResponseEntity.ok(ResponseUtil.success("Room found", room));
+            } else {
+                return ResponseEntity.status(404).body(ResponseUtil.success("Room not found", new ArrayList<>()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(ResponseUtil.failed("Room retrieval failed", e.getMessage()));
         }
     }
 
