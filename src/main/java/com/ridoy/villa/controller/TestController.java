@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/test")
 @Slf4j
 public class TestController {
 
     @GetMapping
     public String isRunning() {
-        return decryptMessage("1 3 4");
+        return decryptMessage("1 3 4 2");
     }
 
     private String decryptMessage(String msg) {
